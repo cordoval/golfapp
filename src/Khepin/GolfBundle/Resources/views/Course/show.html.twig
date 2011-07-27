@@ -1,0 +1,20 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Course Details: {{ course.name }}{% endblock %}
+
+{% block body %}
+<table>
+    <tr>
+        <td>Name:</td>
+        <td>{{ course.name }}</td>
+    </tr>
+    <tr>
+        <td>City:</td>
+        <td>{{ course.city }}</td>
+    </tr>
+    <tr>
+        <td>Number of holes:</td>
+        <td>{{ course.holes }}</td>
+    </tr>
+</table>
+{% endblock %}

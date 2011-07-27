@@ -1,0 +1,24 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Add a new golf course{% endblock %}
+
+{% block body %}
+<form action="{{ path('course_create') }}" method="post">
+    <table>
+        <tr>
+            <td>{{ form_label(form.name) }}</td>
+            <td>{{ form_widget(form.name) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.city) }}</td>
+            <td>{{ form_widget(form.city) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.holes) }}</td>
+            <td>{{ form_widget(form.holes) }}</td>
+        </tr>
+    </table>
+    {{ form_rest(form) }}
+    <input type="submit" />
+</form>
+{% endblock %}
