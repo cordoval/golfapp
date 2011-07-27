@@ -102,48 +102,4 @@ class Course
     {
         return $this->city;
     }
-
-    /**
-     * Set holes_number
-     *
-     * @param integer $holesNumber
-     */
-    public function setHolesNumber($holes_number)
-    {
-        $this->holes_number = $holes_number;
-    }
-
-    /**
-     * Get holes_number
-     *
-     * @return integer 
-     */
-    public function getHolesNumber()
-    {
-        return $this->holes_number;
-    }
-
-    /**
-     * Add holes
-     *
-     * @param Khepin\GolfBundle\Entity\Hole $holes
-     */
-    public function addHoles(\Khepin\GolfBundle\Entity\Hole $holes)
-    {
-        $this->holes[] = $holes;
-    }
-
-    /**
-     * Get holes
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getHoles()
-    {
-        return $this->holes;
-    }
-    
-    public function __toString(){
-        return $this->getName();
-    }
 }

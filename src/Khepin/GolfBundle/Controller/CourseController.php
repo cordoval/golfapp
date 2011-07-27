@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Khepin\GolfBundle\Form\CourseType;
 use Symfony\Component\HttpFoundation\Request;
+use Khepin\GolfBundle\Entity\Hole;
+use Khepin\GolfBundle\Form\HoleType;
 
 class CourseController extends Controller {
 
@@ -35,7 +37,7 @@ class CourseController extends Controller {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($course);
             $em->flush();
-            return $this->redirect($this->generateUrl('course_show', array('id' => $course->getId())));
+            return $this->redirect($this->generateUrl('course_setpars', array('id' => $course->getId())));
         }
         return array('form' => $form->createView());
     }
@@ -48,6 +50,29 @@ class CourseController extends Controller {
     public function showAction($id){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find($id);
         return array('course' => $course);
+    }
+    
+    /**
+     * @Route("/course/setpars/{id}", name="course_setpars")
+     * @Template()
+     * @param integer $id 
+     */
+    public function setparsAction($id){
+        $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find($id);
+        $data = array();
+        $form = $this->createFormBuilder();
+        for($i = 1; $i <= $course->getHolesNumber(); $i++){
+            $hole = new Hole();
+            $hole->setCourse($course);
+            $hole->setNumber($i);
+            $data['hole_'.$i] = $hole;
+            $form->add('hole_'.$i, new HoleType());
+        }
+//        $form = $this->createFormBuilder(array('game' => $data));
+//        $form->add('game', new \Khepin\GolfBundle\Form\ParSetType($course));
+        $form->setData($data);
+        
+        return array('form' => $form->getForm()->createView(), 'course' => $course);
     }
 
 }

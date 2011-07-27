@@ -1,0 +1,17 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Edit Hole Pars For: {{ course.name }}{% endblock %}
+
+{% block body %}
+<form action="/" method="post">
+    <table>
+        {% for hole_form in form %}
+        <tr>
+            <td>{{ form_label(hole_form) }}</td>
+            <td>{{ form_widget(hole_form) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {{ form_widget(form) }}
+</form>
+{% endblock %}
