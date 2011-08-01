@@ -4,6 +4,7 @@ namespace Khepin\GolfBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Khepin\GolfBundle\Entity\Hole;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Khepin\GolfBundle\Entity\Course
@@ -26,6 +27,9 @@ class Course
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\Type(type="string")
+     * @Assert\MinLength(3)
+     * @Assert\MaxLength(255)
      */
     private $name;
 
@@ -33,6 +37,9 @@ class Course
      * @var string $city
      *
      * @ORM\Column(name="city", type="string", length=255)
+     * @Assert\Type(type="string")
+     * @Assert\MinLength(3)
+     * @Assert\MaxLength(255)
      */
     private $city;
 
@@ -40,6 +47,8 @@ class Course
      * @var integer $holes_number
      *
      * @ORM\Column(name="holes_number", type="integer")
+     * @Assert\Type(type="integer")
+     * @Assert\Choice(choices= { "9", "18" }, message="Number of holes should be either 9 or 18.")
      */
     private $holes_number;
     
@@ -110,7 +119,7 @@ class Course
      */
     public function setHolesNumber($holes_number)
     {
-        $this->holes_number = $holes_number;
+        $this->holes_number = (int) $holes_number;
     }
 
     /**

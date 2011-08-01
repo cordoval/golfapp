@@ -9,6 +9,7 @@ use Khepin\GolfBundle\Form\CourseType;
 use Symfony\Component\HttpFoundation\Request;
 use Khepin\GolfBundle\Entity\Hole;
 use Khepin\GolfBundle\Form\HoleType;
+use Khepin\GolfBundle\Entity\Course;
 
 class CourseController extends Controller {
 
@@ -27,7 +28,7 @@ class CourseController extends Controller {
      * Save the form (if form is valid) or redirect to add
      * 
      * @Route("/course/create", name="course_create")
-     * @Template("KhepinGolfBundle:Course:add")
+     * @Template("KhepinGolfBundle:Course:add.html.twig")
      */
     public function createAction(Request $request) {
         $form = $this->createForm(new CourseType());
@@ -59,20 +60,26 @@ class CourseController extends Controller {
      */
     public function setparsAction($id){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find($id);
-        $data = array();
         $form = $this->createFormBuilder();
-        for($i = 1; $i <= $course->getHolesNumber(); $i++){
-            $hole = new Hole();
-            $hole->setCourse($course);
-            $hole->setNumber($i);
-            $data['hole_'.$i] = $hole;
-            $form->add('hole_'.$i, new HoleType());
-        }
-//        $form = $this->createFormBuilder(array('game' => $data));
-//        $form->add('game', new \Khepin\GolfBundle\Form\ParSetType($course));
-        $form->setData($data);
+        $form->add('holes', new \Khepin\GolfBundle\Form\ParSetType($course));
         
         return array('form' => $form->getForm()->createView(), 'course' => $course);
+    }
+    
+    /**
+     * @Route("/course/savepars/", name="save_pars")
+     * @Template("KhepinGolfBundle:Course:setpars.html.twig")
+     */
+    public function saveparsAction(Request $request){
+        $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find(5);
+        $form = $this->createFormBuilder();
+        $form->add('holes', new \Khepin\GolfBundle\Form\ParSetType($course));
+        $form = $form->getForm();
+        $form->bindRequest($request);
+        if($form->isValid()) {
+            return new \Symfony\Component\HttpFoundation\Response('ok');
+        }
+        return array('form' => $form->createView(), 'course' => $course);
     }
 
 }

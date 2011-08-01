@@ -11,7 +11,7 @@ class CourseType extends AbstractType {
         $builder
                 ->add('name')
                 ->add('city')
-                ->add('holes')
+                ->add('holes_number', 'choice', array('choices' => array(18 => 18, 9 => 9)));
         ;
     }
 

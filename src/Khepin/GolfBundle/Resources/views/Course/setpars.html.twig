@@ -3,15 +3,17 @@
 {% block title %}Edit Hole Pars For: {{ course.name }}{% endblock %}
 
 {% block body %}
-<form action="/" method="post">
+<form action="{{ path('save_pars') }}" method="post">
+    {{ form_errors(form) }}
     <table>
-        {% for hole_form in form %}
+        {% for hole_form in form.holes %}
         <tr>
             <td>{{ form_label(hole_form) }}</td>
             <td>{{ form_widget(hole_form) }}</td>
         </tr>
         {% endfor %}
     </table>
-    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+    <input type="submit"/>
 </form>
 {% endblock %}

@@ -5,9 +5,15 @@ namespace Khepin\GolfBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Khepin\GolfBundle\Entity\Hole;
 
 class HoleType extends AbstractType
 {
+    private $hole = null;
+    
+    public function __construct(Hole $hole = null) {
+        $this->hole = $hole;
+    }
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
@@ -15,6 +21,9 @@ class HoleType extends AbstractType
             ->add('par')
             ->add('course', new HiddenType())
         ;
+        if (!is_null($this->hole)){
+            $builder->setData($this->hole);
+        }
     }
 
     public function getName()
