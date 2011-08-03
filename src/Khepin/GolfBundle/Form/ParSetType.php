@@ -18,11 +18,14 @@ class ParSetType extends AbstractType
     
     public function buildForm(FormBuilder $builder, array $options)
     {
+        $builder->add('holes', 'collection', array(
+            'type' => new HoleType(),
+        ));
         for($i = 1; $i <= $this->course->getHolesNumber(); $i++) {
             $hole = new Hole();
             $hole->setCourse($this->course);
             $hole->setNumber($i);
-            $builder->add('hole_'.$i, new HoleType($hole));
+            $builder->get('holes')->add('hole_'.$i, new HoleType($hole));
         }
     }
 

@@ -19,7 +19,6 @@ class HoleType extends AbstractType
         $builder
             ->add('number', new HiddenType())
             ->add('par')
-            ->add('course', new HiddenType())
         ;
         if (!is_null($this->hole)){
             $builder->setData($this->hole);

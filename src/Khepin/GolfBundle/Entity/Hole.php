@@ -113,4 +113,8 @@ class Hole
     {
         return $this->course;
     }
+    
+    public function __toString() {
+        return ''.$this->number;
+    }
 }

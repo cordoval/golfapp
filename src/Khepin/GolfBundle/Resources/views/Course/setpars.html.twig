@@ -4,7 +4,6 @@
 
 {% block body %}
 <form action="{{ path('save_pars') }}" method="post">
-    {{ form_errors(form) }}
     <table>
         {% for hole_form in form.holes %}
         <tr>

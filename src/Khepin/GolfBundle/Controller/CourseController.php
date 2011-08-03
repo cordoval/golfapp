@@ -60,8 +60,7 @@ class CourseController extends Controller {
      */
     public function setparsAction($id){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find($id);
-        $form = $this->createFormBuilder();
-        $form->add('holes', new \Khepin\GolfBundle\Form\ParSetType($course));
+        $form = $this->buildParSetForm($course);
         
         return array('form' => $form->getForm()->createView(), 'course' => $course);
     }
@@ -72,14 +71,27 @@ class CourseController extends Controller {
      */
     public function saveparsAction(Request $request){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find(5);
-        $form = $this->createFormBuilder();
-        $form->add('holes', new \Khepin\GolfBundle\Form\ParSetType($course));
-        $form = $form->getForm();
-        $form->bindRequest($request);
-        if($form->isValid()) {
+        $form = $this->buildParSetForm($course);
+        $form->getForm()->bindRequest($request);
+        
+        if($form->getForm()->isValid()) {
             return new \Symfony\Component\HttpFoundation\Response('ok');
         }
-        return array('form' => $form->createView(), 'course' => $course);
+        return array('form' => $form->getForm()->createView(), 'course' => $course);
+    }
+    
+    private function buildParSetForm($course) {
+        $form = $this->createFormBuilder();
+        $form->add('holes', 'collection', array('type' => new HoleType()));
+        
+        for($i = 1; $i <= $course->getHolesNumber(); $i++) {
+            $hole = new Hole();
+            $hole->setCourse($course);
+            $hole->setNumber($i);
+            $form->get('holes')->add('hole_'.$i, new HoleType($hole));
+        }
+        
+        return $form;
     }
 
 }
