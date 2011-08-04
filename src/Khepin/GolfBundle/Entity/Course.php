@@ -71,6 +71,15 @@ class Course
     {
         return $this->id;
     }
+    
+    /**
+     * Set id
+     * 
+     * @param integer $id 
+     */
+    public function setId($id) {
+        $this->id = $id;
+    }
 
     /**
      * Set name

@@ -10,6 +10,10 @@ use Khepin\GolfBundle\Entity\Hole;
 
 class ParSetType extends AbstractType
 {
+    /**
+     *
+     * @var Course
+     */
     private $course;
     
     public function __construct(Course $course) {
@@ -18,6 +22,7 @@ class ParSetType extends AbstractType
     
     public function buildForm(FormBuilder $builder, array $options)
     {
+        $builder->add('course', 'hidden', array('data' => $this->course->getId()));
         $builder->add('holes', 'collection', array(
             'type' => new HoleType(),
         ));

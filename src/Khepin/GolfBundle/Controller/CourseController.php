@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Khepin\GolfBundle\Form\CourseType;
 use Symfony\Component\HttpFoundation\Request;
 use Khepin\GolfBundle\Entity\Hole;
-use Khepin\GolfBundle\Form\HoleType;
 use Khepin\GolfBundle\Entity\Course;
 
 class CourseController extends Controller {
@@ -60,9 +59,9 @@ class CourseController extends Controller {
      */
     public function setparsAction($id){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find($id);
-        $form = $this->buildParSetForm($course);
+        $form = $this->createForm(new \Khepin\GolfBundle\Form\ParSetType($course));
         
-        return array('form' => $form->getForm()->createView(), 'course' => $course);
+        return array('form' => $form->createView(), 'course' => $course);
     }
     
     /**
@@ -70,28 +69,25 @@ class CourseController extends Controller {
      * @Template("KhepinGolfBundle:Course:setpars.html.twig")
      */
     public function saveparsAction(Request $request){
-        $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find(5);
-        $form = $this->buildParSetForm($course);
-        $form->getForm()->bindRequest($request);
+        $data = $request->get('khepin_golfbundle_parsettype');
+        $course_id = $data['course'];
+        $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')
+                ->find($course_id);
+        $form = $this->createForm(new \Khepin\GolfBundle\Form\ParSetType($course));
+        $form->bindRequest($request);
         
-        if($form->getForm()->isValid()) {
-            return new \Symfony\Component\HttpFoundation\Response('ok');
+        if($form->isValid()) {
+            // Remove the csrf token before iterating on children
+            $form->get('holes')->remove('_token');
+            // Get the entity manager
+            $em = $this->getDoctrine()->getEntityManager();
+            foreach($form->get('holes') as $hole_form) {
+                $hole = $hole_form->getData();
+                $em->persist($hole);
+            }
+            $em->flush();
+            return new \Symfony\Component\HttpFoundation\Response('haha Course: '.$course->getId());
         }
-        return array('form' => $form->getForm()->createView(), 'course' => $course);
+        return array('form' => $form->createView(), 'course' => $course);
     }
-    
-    private function buildParSetForm($course) {
-        $form = $this->createFormBuilder();
-        $form->add('holes', 'collection', array('type' => new HoleType()));
-        
-        for($i = 1; $i <= $course->getHolesNumber(); $i++) {
-            $hole = new Hole();
-            $hole->setCourse($course);
-            $hole->setNumber($i);
-            $form->get('holes')->add('hole_'.$i, new HoleType($hole));
-        }
-        
-        return $form;
-    }
-
 }

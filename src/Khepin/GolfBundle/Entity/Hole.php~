@@ -93,4 +93,28 @@ class Hole
     {
         return $this->par;
     }
+
+    /**
+     * Set course
+     *
+     * @param Khepin\GolfBundle\Entity\Course $course
+     */
+    public function setCourse(\Khepin\GolfBundle\Entity\Course $course)
+    {
+        $this->course = $course;
+    }
+
+    /**
+     * Get course
+     *
+     * @return Khepin\GolfBundle\Entity\Course 
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+    
+    public function __toString() {
+        return ''.$this->number;
+    }
 }

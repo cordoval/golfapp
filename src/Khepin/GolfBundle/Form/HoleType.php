@@ -9,6 +9,10 @@ use Khepin\GolfBundle\Entity\Hole;
 
 class HoleType extends AbstractType
 {
+    /**
+     * Used to populate from the constructor
+     * @var Hole
+     */
     private $hole = null;
     
     public function __construct(Hole $hole = null) {
