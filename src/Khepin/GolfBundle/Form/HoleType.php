@@ -22,7 +22,15 @@ class HoleType extends AbstractType
     {
         $builder
             ->add('number', new HiddenType())
-            ->add('par')
+            ->add('par', 'choice', array(
+                'choices' => array(
+                    '3' => '3',
+                    '4' => '4',
+                    '5' => '5',
+                    ),
+                'expanded' => true,
+                'multiple' => false,
+                ))
         ;
         if (!is_null($this->hole)){
             $builder->setData($this->hole);

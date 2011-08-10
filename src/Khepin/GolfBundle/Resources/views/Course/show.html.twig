@@ -14,7 +14,17 @@
     </tr>
     <tr>
         <td>Number of holes:</td>
-        <td>{{ course.holes }}</td>
+        <td>{{ course.holesNumber }}</td>
     </tr>
+    <tr>
+        <td>Number</td>
+        <td>Par</td>
+    </tr>
+    {% for hole in course.holes %}
+    <tr>
+        <td>{{ hole.number }}</td>
+        <td>{{ hole.par }}</td>
+    </tr>
+    {% endfor %}
 </table>
 {% endblock %}

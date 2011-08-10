@@ -86,7 +86,9 @@ class CourseController extends Controller {
                 $em->persist($hole);
             }
             $em->flush();
-            return new \Symfony\Component\HttpFoundation\Response('haha Course: '.$course->getId());
+            return $this->redirect($this->generateUrl('course_show', array(
+                'id' => $course->getId(),
+            )));
         }
         return array('form' => $form->createView(), 'course' => $course);
     }

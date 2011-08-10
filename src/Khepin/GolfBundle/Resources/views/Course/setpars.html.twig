@@ -8,7 +8,11 @@
         {% for hole_form in form.holes %}
         <tr>
             <td>{{ form_label(hole_form) }}</td>
-            <td>{{ form_widget(hole_form) }}</td>
+            <td>
+                {% for par in hole_form %}
+                    {{ form_widget(par) }}
+                {% endfor %}
+            </td>
         </tr>
         {% endfor %}
     </table>
