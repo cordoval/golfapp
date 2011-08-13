@@ -59,7 +59,7 @@ class CourseController extends Controller {
      */
     public function setparsAction($id){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find($id);
-        $form = $this->createForm(new \Khepin\GolfBundle\Form\ParSetType($course));
+        $form = $this->createForm(new \Khepin\GolfBundle\Form\ParSetType($course->getHolesNumber()));
         
         return array('form' => $form->createView(), 'course' => $course);
     }
@@ -71,7 +71,9 @@ class CourseController extends Controller {
     public function saveparsAction($id, Request $request){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')
                 ->find($id);
-        $form = $this->createForm(new \Khepin\GolfBundle\Form\ParSetType($course));
+        $par_form = new \Khepin\GolfBundle\Form\ParSetType($course->getHolesNumber());
+        $par_form->setCourse($course);
+        $form = $this->createForm($par_form);
         $form->bindRequest($request);
         
         if($form->isValid()) {
