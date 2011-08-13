@@ -53,8 +53,8 @@ class Course
     private $holes_number;
     
     /**
-     * @var array
-     * @ORM\OneToMany(targetEntity="Hole", mappedBy="course")
+     * @var \Doctrine\Common\Collections\ArrayCollection()
+     * @ORM\OneToMany(targetEntity="Hole", mappedBy="course", cascade={"persist"})
      */
     private $holes;
 
@@ -149,6 +149,10 @@ class Course
     public function addHoles(\Khepin\GolfBundle\Entity\Hole $holes)
     {
         $this->holes[] = $holes;
+    }
+    
+    public function setHoles(array $holes){
+        $this->holes = $holes;
     }
 
     /**

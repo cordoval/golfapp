@@ -9,32 +9,22 @@ use Khepin\GolfBundle\Entity\Hole;
 
 class HoleType extends AbstractType
 {
-    /**
-     * Used to populate from the constructor
-     * @var Hole
-     */
-    private $hole = null;
-    
-    public function __construct(Hole $hole = null) {
-        $this->hole = $hole;
-    }
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
             ->add('number', new HiddenType())
             ->add('par', 'choice', array(
+                // Hardcoded since golf rules don't change "that often"
                 'choices' => array(
                     '3' => '3',
                     '4' => '4',
                     '5' => '5',
                     ),
+                // Display as 3 radio buttons
                 'expanded' => true,
                 'multiple' => false,
                 ))
         ;
-        if (!is_null($this->hole)){
-            $builder->setData($this->hole);
-        }
     }
 
     public function getName()

@@ -59,33 +59,27 @@ class CourseController extends Controller {
      */
     public function setparsAction($id){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')->find($id);
-        $form = $this->createForm(new \Khepin\GolfBundle\Form\ParSetType($course));
+        $form = $this->createForm(new \Khepin\GolfBundle\Form\ParSetType($course->getHolesNumber()));
         
         return array('form' => $form->createView(), 'course' => $course);
     }
     
     /**
-     * @Route("/course/savepars/", name="save_pars")
+     * @Route("/course/savepars/{id}", name="save_pars")
      * @Template("KhepinGolfBundle:Course:setpars.html.twig")
      */
-    public function saveparsAction(Request $request){
-        $data = $request->get('khepin_golfbundle_parsettype');
-        $course_id = $data['course'];
+    public function saveparsAction($id, Request $request){
         $course = $this->getDoctrine()->getRepository('KhepinGolfBundle:Course')
-                ->find($course_id);
-        $form = $this->createForm(new \Khepin\GolfBundle\Form\ParSetType($course));
+                ->find($id);
+        $par_form = new \Khepin\GolfBundle\Form\ParSetType($course->getHolesNumber());
+        $par_form->setCourse($course);
+        $form = $this->createForm($par_form);
         $form->bindRequest($request);
         
         if($form->isValid()) {
-            // Remove the csrf token before iterating on children
-            $form->get('holes')->remove('_token');
-            // Get the entity manager
-            $em = $this->getDoctrine()->getEntityManager();
-            foreach($form->get('holes') as $hole_form) {
-                $hole = $hole_form->getData();
-                $em->persist($hole);
-            }
-            $em->flush();
+            $data = $form->getData();
+            $course->setHoles($data['holes']);
+            $this->getDoctrine()->getEntityManager()->flush();
             return $this->redirect($this->generateUrl('course_show', array(
                 'id' => $course->getId(),
             )));
