@@ -3,7 +3,7 @@
 {% block title %}Edit Hole Pars For: {{ course.name }}{% endblock %}
 
 {% block body %}
-<form action="{{ path('save_pars') }}" method="post">
+<form action="{{ path('save_pars', {'id': course.id}) }}" method="post">
     <table>
         {% for hole_form in form.holes %}
         <tr>
